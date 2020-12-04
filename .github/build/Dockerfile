@@ -1,0 +1,14 @@
+FROM node:15 AS build
+
+RUN mkdir /smartmeter2mqtt \
+ && cd /smartmeter2mqtt \
+ && yarn add meter2mqtt
+
+
+FROM node:15-alpine
+
+COPY --from=build /smartmeter2mqtt /smartmeter2mqtt
+
+ENV PATH=/smartmeter2mqtt/node_modules/.bin:${PATH}
+
+ENTRYPOINT [ "smartmeter2mqtt", "/smartmeter2mqtt/config.json" ]
