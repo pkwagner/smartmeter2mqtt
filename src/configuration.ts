@@ -2,10 +2,12 @@ import { ObisOptions } from 'smartmeter-obis';
 import { ObisMeasurement } from 'smartmeter-obis/lib/ObisMeasurement';
 import { readFileSync } from 'fs';
 
-export const config: Configuration = JSON.parse(readFileSync('./config.json', 'utf-8'));
+export const CONFIG: Configuration = JSON.parse(readFileSync(process.argv[2], 'utf-8'));
 
-export interface Configuration {
+interface Configuration {
   strict?: boolean;
+  unpack?: boolean;
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
 
   mqtt: {
     topic: string;
@@ -17,7 +19,7 @@ export interface Configuration {
 
   obis: ObisOptions;
 
-  mappings: {
+  rules: {
     [key: string]: {
       medium?: number;
       channel?: number;
@@ -30,7 +32,7 @@ export interface Configuration {
 }
 
 export function getMeasurementMappings(measurement: ObisMeasurement): string[] {
-  return Object.entries(config.mappings).filter((mapping) => {
+  return Object.entries(CONFIG.rules).filter((mapping) => {
     const mappingRules = mapping[1];
 
     return Object.entries(mappingRules).every((rule) => {

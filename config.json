@@ -1,9 +1,25 @@
 {
-  "strict": "true",
+  "strict": false,
+  "unpack": false,
+  "logLevel": "info",
   "mqtt": {
+    "topic": "energy/mymeter",
+    "server": "mqtt://example.com",
+    "port": 1883,
+    "username": "johndoe",
+    "password": "sEcReT"
   },
   "obis": {
+    "protocol": "SmlProtocol",
+    "transport": "SerialResponseTransport",
+    "transportSerialPort": "/dev/ttyUSB0",
+    "protocolSmlIgnoreInvalidCRC": false,
+    "requestInterval": 30
   },
-  "mappings": {
+  "rules": {
+    "myoutput1": {
+      "measureType": 8,
+      "tariffRate": 0
+    }
   }
 }
