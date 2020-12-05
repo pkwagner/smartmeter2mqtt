@@ -1,6 +1,6 @@
 {
   "name": "meter2mqtt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": "github:pkwagner/smartmeter2mqtt",
   "author": "Paul Wagner <git@alphath.space>",
   "license": "MIT",
