@@ -1,1 +1,3 @@
-# smartmeter2mqtt
+# :construction: smartmeter2mqtt
+
+*:hammer: Under construction*
