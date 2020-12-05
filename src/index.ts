@@ -4,9 +4,9 @@ import * as AsciiTable from 'ascii-table';
 import * as logger from 'node-color-log';
 import * as Configuration from './configuration';
 
-const MQTT_RECONNECT_PERIOD = 10;
-
 logger.setLevel(Configuration.CONFIG.logLevel || 'info');
+
+const MQTT_RECONNECT_PERIOD = 10;
 
 // Argument order: <RESERVED> <RESERVED> <CONFIG_PATH> [-T]
 if (process.argv.length >= 4 && process.argv[3] === '-T') {
