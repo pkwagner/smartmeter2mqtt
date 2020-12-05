@@ -1,9 +1,41 @@
 import * as logger from 'node-color-log';
 import * as mqtt from 'mqtt';
+import { ObisMeasurement } from 'smartmeter-obis';
 import * as Obis from 'smartmeter-obis';
 import Configuration from './configuration';
 
 const MQTT_RECONNECT_PERIOD = 10;
+
+export function composePayload(
+  config: Configuration,
+  measurements: ObisMeasurement[],
+  warn = logger.warn,
+): any {
+  const mqttPayload = {};
+  measurements.forEach((measurement) => {
+    const payloadKeys = config.getMeasurementMappings(measurement);
+
+    payloadKeys.forEach((payloadKey) => {
+      if (payloadKey in mqttPayload) {
+        warn(`Rule for key ${payloadKey} is arbitrary. Skipping new value...`);
+        return;
+      }
+
+      mqttPayload[payloadKey] = config.config.unpack
+        ? measurement.values[0].value
+        : measurement.values;
+    });
+  });
+
+  if (config.config.strict && !Object.keys(config.config.rules).every(
+    (mappingKey) => mappingKey in mqttPayload,
+  )) {
+    warn('Missing key(s) in final output while using strict mode. Dropping message...');
+    return null;
+  }
+
+  return mqttPayload;
+}
 
 export default function handleMain(config: Configuration) {
   logger.info('Connecting to MQTT broker...');
@@ -31,28 +63,8 @@ export default function handleMain(config: Configuration) {
       return;
     }
 
-    const mqttPayload = {};
-    Object.values(measurements).forEach((measurement) => {
-      const payloadKeys = config.getMeasurementMappings(measurement);
-
-      payloadKeys.forEach((payloadKey) => {
-        if (payloadKey in mqttPayload) {
-          logger.warn(`Rule for key ${payloadKey} is arbitrary. Skipping new value...`);
-          return;
-        }
-
-        mqttPayload[payloadKey] = config.config.unpack
-          ? measurement.values[0].value
-          : measurement.values;
-      });
-    });
-
-    if (config.config.strict && !Object.keys(config.config.rules).every(
-      (mappingKey) => mappingKey in mqttPayload,
-    )) {
-      logger.warn('Missing key(s) in final output while using strict mode. Dropping message...');
-      return;
-    }
+    const mqttPayload = composePayload(config, Object.values(measurements));
+    if (!mqttPayload) return;
 
     if (!mqttClient.connected) {
       logger.warn('Unable to deliver MQTT message: Broker not (yet?) connected');
