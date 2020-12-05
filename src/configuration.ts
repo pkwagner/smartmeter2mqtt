@@ -1,5 +1,4 @@
-import { ObisOptions } from 'smartmeter-obis';
-import { ObisMeasurement } from 'smartmeter-obis/lib/ObisMeasurement';
+import { ObisMeasurement, ObisOptions } from 'smartmeter-obis';
 import { readFileSync } from 'fs';
 
 export const CONFIG: Configuration = JSON.parse(readFileSync(process.argv[2], 'utf-8'));
