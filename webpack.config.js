@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
@@ -18,11 +17,4 @@ module.exports = {
   watchOptions: {
     ignored: /node_modules/,
   },
-  plugins: [
-    new webpack.BannerPlugin({
-      banner: '#!/usr/bin/env node',
-      raw: true,
-      entryOnly: true,
-    }),
-  ],
 };
