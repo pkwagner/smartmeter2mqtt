@@ -1,9 +1,7 @@
 import { ObisMeasurement, ObisOptions } from 'smartmeter-obis';
 import { readFileSync } from 'fs';
 
-export const CONFIG: Configuration = JSON.parse(readFileSync(process.argv[2], 'utf-8'));
-
-interface Configuration {
+interface BaseConfiguration {
   strict?: boolean;
   unpack?: boolean;
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
@@ -30,15 +28,27 @@ interface Configuration {
   }
 }
 
-export function getMeasurementMappings(measurement: ObisMeasurement): string[] {
-  return Object.entries(CONFIG.rules).filter((mapping) => {
-    const mappingRules = mapping[1];
+export default class Configuration {
+  config: BaseConfiguration;
 
-    return Object.entries(mappingRules).every((rule) => {
-      const ruleKey = rule[0];
-      const ruleValue = rule[1];
+  constructor(config: BaseConfiguration) {
+    this.config = config;
+  }
 
-      return ruleKey in measurement && measurement[ruleKey] === ruleValue;
-    });
-  }).map((mapping) => mapping[0]);
+  static readFromFile(filePath: string): Configuration {
+    return new Configuration(JSON.parse(readFileSync(filePath, 'utf-8')));
+  }
+
+  getMeasurementMappings(measurement: ObisMeasurement): string[] {
+    return Object.entries(this.config.rules).filter((mapping) => {
+      const mappingRules = mapping[1];
+
+      return Object.entries(mappingRules).every((rule) => {
+        const ruleKey = rule[0];
+        const ruleValue = rule[1];
+
+        return ruleKey in measurement && measurement[ruleKey] === ruleValue;
+      });
+    }).map((mapping) => mapping[0]);
+  }
 }
