@@ -1,6 +1,6 @@
 {
   "name": "meter2mqtt",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": "github:pkwagner/smartmeter2mqtt",
   "author": "Paul Wagner <git@alphath.space>",
   "license": "MIT",
@@ -10,11 +10,11 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "files": [
-    "src",
+    "bin",
     "dist/main.js"
   ],
   "bin": {
-    "smartmeter2mqtt": "./dist/main.js"
+    "smartmeter2mqtt": "./bin/smartmeter2mqtt.js"
   },
   "dependencies": {
     "ascii-table": "^0.0.9",
