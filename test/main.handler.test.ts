@@ -48,16 +48,13 @@ describe('MainHandler', () => {
     });
 
     it('should be sent twice (arbitrary)', () => {
-      const o = { ...m };
+      const o: ObisMeasurement = { ...m, idToString: null, valueToString: null };
       m.medium = 2;
 
       let warned = false;
       assert.deepStrictEqual(Object.keys(composePayload(config, [o, m], () => {
         warned = true;
-      })), [
-        'always-shiny',
-        'rainy-rule',
-      ]);
+      })), ['always-shiny', 'rainy-rule']);
       assert.strictEqual(warned, true);
     });
 

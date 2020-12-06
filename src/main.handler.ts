@@ -21,6 +21,7 @@ export function composePayload(
         return;
       }
 
+      // Assumption: Always at least one entry -> let it fail otherwise
       mqttPayload[payloadKey] = config.config.unpack
         ? measurement.values[0].value
         : measurement.values;
