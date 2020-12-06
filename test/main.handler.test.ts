@@ -54,13 +54,14 @@ describe('MainHandler', () => {
       let warned = false;
       assert.deepStrictEqual(Object.keys(composePayload(config, [o, m], () => {
         warned = true;
-      })), ['always-shiny', 'rainy-rule']);
+      })), ['time', 'always-shiny', 'rainy-rule']);
       assert.strictEqual(warned, true);
     });
 
     it('should be sent twice', () => {
       let warned = false;
       assert.deepStrictEqual(Object.keys(composePayload(config, [m], () => { warned = true; })), [
+        'time',
         'always-shiny',
         'rainy-rule',
       ]);
@@ -72,6 +73,7 @@ describe('MainHandler', () => {
 
       let warned = false;
       assert.deepStrictEqual(Object.keys(composePayload(config, [m], () => { warned = true; })), [
+        'time',
         'always-shiny',
         'sunny-rule',
         'rainy-rule',

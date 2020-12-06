@@ -11,7 +11,8 @@ export function composePayload(
   measurements: ObisMeasurement[],
   warn = logger.warn,
 ): any {
-  const mqttPayload = {};
+  const mqttPayload = { time: Math.floor(Date.now() / 1000) };
+
   measurements.forEach((measurement) => {
     const payloadKeys = config.getMeasurementMappings(measurement);
 

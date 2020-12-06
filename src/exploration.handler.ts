@@ -19,18 +19,22 @@ export default function handleExploration(config: Configuration) {
       'previousMeasurement',
       'value (first)',
       'unit (first)',
+      'description',
     );
 
     Object.values(measurements).forEach((measurement) => {
+      const names = Obis.ObisNames.resolveObisName(measurement, config.config.obis.obisNameLanguage || 'en');
+
       table.addRow(
-        measurement.medium,
-        measurement.channel,
-        measurement.measurement,
-        measurement.measureType,
-        measurement.tariffRate,
-        measurement.previousMeasurement,
+        `[${measurement.medium}] ${names.mediumName}`,
+        `[${measurement.channel}] ${names.channelName}`,
+        `[${measurement.measurement}] ${names.measurementName}`,
+        `[${measurement.measureType}] ${names.measurementTypeName}`,
+        `[${measurement.tariffRate}] ${names.tariffRateName}`,
+        `[${measurement.previousMeasurement}] ${names.previousMeasurementName}`,
         measurement.values[0].value,
         measurement.values[0].unit,
+        names.customName,
       );
     });
 
