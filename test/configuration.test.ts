@@ -51,6 +51,16 @@ describe('Configuration', () => {
 
         idToString: null,
         valueToString: null,
+        getRawValue: null,
+        getChannel: null,
+        getMeasurement: null,
+        getMeasureType: null,
+        getMedium: null,
+        getPreviousMeasurement: null,
+        getTariffRate: null,
+        getValue: null,
+        getValueLength: null,
+        getValues: null,
       };
 
       assert.deepStrictEqual(config.getMeasurementMappings(m), [
@@ -72,6 +82,16 @@ describe('Configuration', () => {
 
         idToString: null,
         valueToString: null,
+        getRawValue: null,
+        getChannel: null,
+        getMeasurement: null,
+        getMeasureType: null,
+        getMedium: null,
+        getPreviousMeasurement: null,
+        getTariffRate: null,
+        getValue: null,
+        getValueLength: null,
+        getValues: null,
       };
 
       assert.deepStrictEqual(config.getMeasurementMappings(m), ['always-shiny', 'rainy-rule']);
@@ -89,6 +109,16 @@ describe('Configuration', () => {
 
         idToString: null,
         valueToString: null,
+        getRawValue: null,
+        getChannel: null,
+        getMeasurement: null,
+        getMeasureType: null,
+        getMedium: null,
+        getPreviousMeasurement: null,
+        getTariffRate: null,
+        getValue: null,
+        getValueLength: null,
+        getValues: null,
       };
 
       assert.deepStrictEqual(config.getMeasurementMappings(m), ['always-shiny']);

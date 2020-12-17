@@ -44,11 +44,35 @@ describe('MainHandler', () => {
 
         idToString: null,
         valueToString: null,
+        getRawValue: null,
+        getChannel: null,
+        getMeasurement: null,
+        getMeasureType: null,
+        getMedium: null,
+        getPreviousMeasurement: null,
+        getTariffRate: null,
+        getValue: null,
+        getValueLength: null,
+        getValues: null,
       };
     });
 
     it('should be sent twice (arbitrary)', () => {
-      const o: ObisMeasurement = { ...m, idToString: null, valueToString: null };
+      const o: ObisMeasurement = {
+        ...m,
+        idToString: null,
+        valueToString: null,
+        getRawValue: null,
+        getChannel: null,
+        getMeasurement: null,
+        getMeasureType: null,
+        getMedium: null,
+        getPreviousMeasurement: null,
+        getTariffRate: null,
+        getValue: null,
+        getValueLength: null,
+        getValues: null,
+      };
       m.medium = 2;
 
       let warned = false;
