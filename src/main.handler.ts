@@ -4,6 +4,7 @@ import { ObisMeasurement } from 'smartmeter-obis';
 import * as Obis from 'smartmeter-obis';
 import Configuration from './configuration';
 
+const MQTT_DEFAULT_CLIENT_ID = 'smartmeter2mqtt';
 const MQTT_RECONNECT_PERIOD = 10;
 
 export function composePayload(
@@ -45,6 +46,7 @@ export default function handleMain(config: Configuration) {
     port: config.config.mqtt.port,
     username: config.config.mqtt.username,
     password: config.config.mqtt.password,
+    clientId: config.config.mqtt.clientId || MQTT_DEFAULT_CLIENT_ID,
     reconnectPeriod: MQTT_RECONNECT_PERIOD * 1000,
   });
 
@@ -53,14 +55,14 @@ export default function handleMain(config: Configuration) {
   });
 
   mqttClient.on('error', (error) => {
-    logger.warn('Encountered MQTT connection error');
+    logger.warn('Encountered MQTT connection error:');
     logger.log(error);
   });
 
   logger.info('Setting up OBIS...');
   Obis.init(config.config.obis, (error, measurements) => {
     if (error) {
-      logger.warn('Encountered unknown error while obis data fetch');
+      logger.warn('Encountered unknown error while obis data fetch:');
       logger.log(error);
       return;
     }

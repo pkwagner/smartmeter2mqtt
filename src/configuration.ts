@@ -12,6 +12,7 @@ interface BaseConfiguration {
     port: number;
     username?: string;
     password?: string;
+    clientId?: string;
   };
 
   obis: ObisOptions;
