@@ -1,9 +1,12 @@
 {
   "name": "@pkwagner/smartmeter2mqtt",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "repository": "github:pkwagner/smartmeter2mqtt",
   "author": "Paul Wagner <git@alphath.space>",
   "license": "MIT",
+  "bin": {
+    "smartmeter2mqtt": "./bin/smartmeter2mqtt.js"
+  },
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
