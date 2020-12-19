@@ -1,0 +1,68 @@
+name: build-deploy
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [released]
+  schedule:
+    - cron: 0 5 1 * *
+
+jobs:
+  build-deploy:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Node.js setup
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: '15.x'
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn install
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn test
+      - if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  deploy-docker:
+    if: always() && github.event_name != 'pull_request'
+    needs: [build-deploy]
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: pkwagner/smartmeter2mqtt
+      DOCKER_PLATFORMS: linux/amd64,linux/arm/v7,linux/arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: QEMU setup
+        uses: docker/setup-qemu-action@v1
+      - name: Docker Buildx setup
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+          install: true
+      - name: Authentication
+        run: |
+          echo "${{secrets.DOCKER_TOKEN}}" | docker login --username "${{secrets.DOCKER_USERNAME}}" --password-stdin
+      - name: Build & Deploy
+        if: success()
+        run: |
+          TAGS="--tag ${DOCKER_IMAGE}:latest"
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            TAGS="$TAGS --tag ${DOCKER_IMAGE}:stable"
+            TAGS="$TAGS --tag ${DOCKER_IMAGE}:${GITHUB_REF#refs/tags/v}"
+          fi
+          docker build \
+            --platform $DOCKER_PLATFORMS \
+            --push \
+            $TAGS \
+            .github/build
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ${HOME}/.docker/config.json
