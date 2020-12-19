@@ -1,6 +1,6 @@
 {
   "name": "@pkwagner/smartmeter2mqtt",
-  "version": "0.9.1",
+  "version": "0.9.3",
   "repository": "github:pkwagner/smartmeter2mqtt",
   "author": "Paul Wagner <git@alphath.space>",
   "license": "MIT",
@@ -13,6 +13,11 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "nyc mocha -r ts-node/register ./test/**/*.ts"
   },
+  "files": [
+    "bin",
+    "dist",
+    "config.json"
+  ],
   "dependencies": {
     "ascii-table": "^0.0.9",
     "mqtt": "^4.2.2",
