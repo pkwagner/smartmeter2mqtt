@@ -4,13 +4,14 @@ on:
   push:
   pull_request:
   release:
-    types: [released]
+    types:
+      - released
   schedule:
     - cron: 0 5 1 * *
 
 jobs:
   build-deploy:
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,13 +25,13 @@ jobs:
       - run: yarn build
       - run: yarn lint
       - run: yarn test
-      - if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+      - if: success() && github.event_name == 'release'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   deploy-docker:
-    if: always() && (github.event_name == 'schedule' || github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/master'))
+    if: always() && (github.event_name == 'schedule' || github.event_name == 'release')
     needs: [build-deploy]
     runs-on: ubuntu-latest
     env:
