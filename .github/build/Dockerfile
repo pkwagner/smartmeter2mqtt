@@ -1,11 +1,11 @@
-FROM node:15 AS build
+FROM node:18 AS build
 
 RUN mkdir /smartmeter2mqtt \
  && cd /smartmeter2mqtt \
  && yarn add @pkwagner/smartmeter2mqtt
 
 
-FROM node:15-alpine
+FROM node:18-alpine
 
 COPY --from=build /smartmeter2mqtt /smartmeter2mqtt
 
