@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "ascii-table": "^0.0.9",
-    "mqtt": "^4.2.2",
+    "mqtt": "^4.3.7",
     "node-color-log": "^5.2.0",
     "smartmeter-obis": "^2.2.0"
   },
